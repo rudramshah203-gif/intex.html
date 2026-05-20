@@ -1,0 +1,601 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:var(--color-background-tertiary);color:var(--color-text-primary);font-size:14px;line-height:1.5;min-height:100vh}
+.app{display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-secondary);padding:0 16px;display:flex;align-items:center;justify-content:space-between;height:50px;position:sticky;top:0;z-index:100}
+.brand{display:flex;align-items:center;gap:8px;font-weight:500;font-size:14px}
+.brand-pip{width:7px;height:7px;border-radius:50%;background:#BA7517}
+.nav{display:flex;gap:2px}
+.nb{background:none;border:none;padding:5px 11px;border-radius:var(--border-radius-md);font-size:12px;cursor:pointer;color:var(--color-text-secondary);transition:all .15s;display:flex;align-items:center;gap:5px}
+.nb:hover{background:var(--color-background-secondary);color:var(--color-text-primary)}
+.nb.active{background:var(--color-background-secondary);color:var(--color-text-primary);font-weight:500}
+.main{padding:18px;flex:1}
+.pg{display:none}.pg.active{display:block}
+.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.pt{font-size:17px;font-weight:500}
+.btn{border:0.5px solid var(--color-border-secondary);background:var(--color-background-primary);color:var(--color-text-primary);padding:6px 13px;border-radius:var(--border-radius-md);font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all .15s}
+.btn:hover{background:var(--color-background-secondary)}
+.btn-p{background:#BA7517;border-color:#BA7517;color:#fff}.btn-p:hover{opacity:.9}
+.btn-sm{padding:3px 9px;font-size:12px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:18px}
+.met{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px}
+.met-l{font-size:11px;color:var(--color-text-secondary);margin-bottom:5px}
+.met-v{font-size:21px;font-weight:500}
+.met-s{font-size:11px;color:var(--color-text-tertiary);margin-top:2px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;margin-bottom:14px}
+.ch{padding:12px 15px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between}
+.ct{font-weight:500;font-size:13px}
+.cb{padding:14px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:7px 12px;color:var(--color-text-secondary);font-weight:500;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;text-transform:uppercase;letter-spacing:.03em}
+td{padding:9px 12px;border-bottom:0.5px solid var(--color-border-tertiary)}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:var(--color-background-secondary)}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+.bg{background:var(--color-background-success);color:var(--color-text-success)}
+.ba{background:var(--color-background-warning);color:var(--color-text-warning)}
+.br{background:var(--color-background-danger);color:var(--color-text-danger)}
+.bb{background:var(--color-background-info);color:var(--color-text-info)}
+.bgr{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg.full{grid-column:1/-1}
+label{font-size:11px;color:var(--color-text-secondary);font-weight:500;text-transform:uppercase;letter-spacing:.03em}
+input,select,textarea{border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary);border-radius:var(--border-radius-md);padding:7px 9px;font-size:13px;font-family:inherit;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#BA7517}
+textarea{resize:vertical;min-height:60px}
+.pb{height:6px;border-radius:3px;background:var(--color-background-secondary);overflow:hidden;margin:4px 0}
+.pf{height:100%;border-radius:3px;background:#BA7517;transition:width .3s}
+.mo{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:200;display:none;align-items:center;justify-content:center;padding:20px}
+.mo.open{display:flex}
+.modal{background:var(--color-background-primary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-secondary);width:580px;max-width:100%;max-height:88vh;overflow-y:auto}
+.mh{padding:14px 18px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--color-background-primary);z-index:1}
+.mb{padding:18px}
+.mf{padding:12px 18px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;justify-content:flex-end;gap:8px;position:sticky;bottom:0;background:var(--color-background-primary)}
+.xb{background:none;border:none;cursor:pointer;color:var(--color-text-secondary);font-size:17px;line-height:1;padding:2px}
+.xb:hover{color:var(--color-text-primary)}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.tl{display:flex;flex-direction:column}
+.tli{display:flex;gap:12px;padding-bottom:16px}
+.tli:last-child{padding-bottom:0}
+.tll{display:flex;flex-direction:column;align-items:center;width:26px;flex-shrink:0}
+.tld{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0}
+.tld.done{background:var(--color-background-success);color:var(--color-text-success)}
+.tld.active{background:var(--color-background-warning);color:var(--color-text-warning)}
+.tld.skip{background:var(--color-background-danger);color:var(--color-text-danger)}
+.tld.pend{background:var(--color-background-secondary);color:var(--color-text-secondary)}
+.tlln{width:1px;flex:1;background:var(--color-border-tertiary);margin-top:3px}
+.tlc{flex:1;padding-top:3px}
+.tlt{font-weight:500;font-size:13px}
+.tls{font-size:11px;color:var(--color-text-secondary);margin-top:1px}
+.tab-row{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:16px}
+.tab{padding:7px 14px;font-size:13px;cursor:pointer;border:none;border-bottom:2px solid transparent;color:var(--color-text-secondary);background:none;margin-bottom:-0.5px}
+.tab:hover{color:var(--color-text-primary)}
+.tab.active{color:var(--color-text-primary);font-weight:500;border-bottom-color:#BA7517}
+.detail-panel{display:none}.detail-panel.open{display:block}
+.back-btn{display:inline-flex;align-items:center;gap:5px;font-size:13px;color:var(--color-text-secondary);cursor:pointer;margin-bottom:14px;background:none;border:none;padding:0}
+.back-btn:hover{color:var(--color-text-primary)}
+.stage-pipeline{display:flex;align-items:center;gap:0;margin-bottom:20px;overflow-x:auto;padding-bottom:4px}
+.sp-step{display:flex;align-items:center;flex-shrink:0}
+.sp-box{padding:6px 12px;border-radius:var(--border-radius-md);font-size:11px;font-weight:500;white-space:nowrap;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:pointer;transition:all .15s}
+.sp-box.done{background:var(--color-background-success);color:var(--color-text-success);border-color:var(--color-border-success)}
+.sp-box.current{background:#FAEEDA;color:#854F0B;border-color:#EF9F27}
+.sp-arrow{color:var(--color-border-secondary);font-size:12px;padding:0 4px}
+.kv-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+.kv-row:last-child{border-bottom:none}
+.kv-k{color:var(--color-text-secondary);font-size:12px}
+.section-sep{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin:16px 0 10px;padding-bottom:6px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:11px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary);margin:2px}
+.checklist-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary)}
+.checklist-item:last-child{border-bottom:none}
+.cb-box{width:18px;height:18px;border-radius:3px;border:0.5px solid var(--color-border-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0}
+.cb-box.checked{background:var(--color-background-success);border-color:var(--color-border-success);color:var(--color-text-success)}
+.alert-warn{background:var(--color-background-warning);color:var(--color-text-warning);border:0.5px solid var(--color-border-warning);padding:8px 12px;border-radius:var(--border-radius-md);font-size:12px;margin-bottom:12px}
+</style>
+
+<div class="app">
+<div class="topbar">
+  <div class="brand"><div class="brand-pip"></div>ConstructFin LMS</div>
+  <div class="nav">
+    <button class="nb active" onclick="showPg('dashboard')"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Dashboard</button>
+    <button class="nb" onclick="showPg('pipeline')"><i class="ti ti-git-branch" aria-hidden="true"></i> Pipeline</button>
+    <button class="nb" onclick="showPg('loans')"><i class="ti ti-building-bank" aria-hidden="true"></i> Loans</button>
+    <button class="nb" onclick="showPg('tranches')"><i class="ti ti-cash" aria-hidden="true"></i> Tranches</button>
+    <button class="nb" onclick="showPg('searches')"><i class="ti ti-file-search" aria-hidden="true"></i> L &amp; T</button>
+    <button class="nb" onclick="showPg('monitoring')"><i class="ti ti-chart-bar" aria-hidden="true"></i> Monitoring</button>
+  </div>
+</div>
+<div class="main">
+
+<!-- DASHBOARD -->
+<div id="pg-dashboard" class="pg active">
+  <div class="ph"><div class="pt">Portfolio Overview</div><span id="dash-date" style="font-size:12px;color:var(--color-text-secondary)"></span></div>
+  <div class="metrics" id="dash-metrics"></div>
+  <div class="two-col">
+    <div class="card"><div class="ch"><span class="ct">Pipeline by Stage</span></div><div class="cb" id="dash-pipeline"></div></div>
+    <div class="card"><div class="ch"><span class="ct">Pending Actions</span></div><div style="padding:0" id="dash-actions"></div></div>
+  </div>
+</div>
+
+<!-- PIPELINE -->
+<div id="pg-pipeline" class="pg">
+  <div class="ph">
+    <div class="pt">Deal Pipeline</div>
+    <button class="btn btn-p" onclick="openM('add-deal')"><i class="ti ti-plus" aria-hidden="true"></i> New Deal</button>
+  </div>
+  <div class="tab-row">
+    <button class="tab active" onclick="filterDeals('all',this)">All</button>
+    <button class="tab" onclick="filterDeals('PD',this)">1 · PD</button>
+    <button class="tab" onclick="filterDeals('MIS Review',this)">2 · MIS Review</button>
+    <button class="tab" onclick="filterDeals('Structuring',this)">3 · Structuring</button>
+    <button class="tab" onclick="filterDeals('Credit Committee',this)">4 · Credit</button>
+    <button class="tab" onclick="filterDeals('Sanctioned',this)">5 · Sanctioned</button>
+  </div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Deal ID</th><th>Borrower</th><th>Project</th><th>Ask (₹L)</th><th>Stage</th><th>PD Date</th><th>Assigned</th><th></th></tr></thead>
+      <tbody id="deals-tbody"></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- LOANS -->
+<div id="pg-loans" class="pg">
+  <div id="loans-list">
+    <div class="ph"><div class="pt">Active Loans</div><button class="btn btn-p" onclick="openM('add-loan')"><i class="ti ti-plus" aria-hidden="true"></i> New Loan</button></div>
+    <div class="card"><table><thead><tr><th>Loan ID</th><th>Borrower</th><th>Project</th><th>Sanction (₹L)</th><th>Disbursed</th><th>Stage</th><th>Status</th><th></th></tr></thead><tbody id="loans-tbody"></tbody></table></div>
+  </div>
+  <div id="loan-detail" class="detail-panel">
+    <button class="back-btn" onclick="closeDetail()"><i class="ti ti-arrow-left" aria-hidden="true"></i> Back to loans</button>
+    <div id="loan-detail-inner"></div>
+  </div>
+</div>
+
+<!-- TRANCHES -->
+<div id="pg-tranches" class="pg">
+  <div class="ph"><div class="pt">Disbursements</div><button class="btn btn-p" onclick="openM('add-tranche')"><i class="ti ti-plus" aria-hidden="true"></i> Record Disbursement</button></div>
+  <div class="card" style="margin-bottom:12px"><div class="cb" style="padding:8px 14px;display:flex;align-items:center;gap:10px"><label style="white-space:nowrap">Filter:</label><select id="tranche-filter" style="width:220px" onchange="renderTranches()"><option value="">All loans</option></select></div></div>
+  <div class="card" id="tranches-body-wrap">
+    <table><thead><tr><th>#</th><th>Loan / Borrower</th><th>Amount (₹L)</th><th>Date</th><th>Purpose</th><th>Construction Stage</th><th>Status</th></tr></thead><tbody id="tranches-tbody"></tbody></table>
+  </div>
+</div>
+
+<!-- LEGAL & TECHNICAL -->
+<div id="pg-searches" class="pg">
+  <div class="ph"><div class="pt">Legal &amp; Technical Searches</div><button class="btn btn-p" onclick="openM('add-search')"><i class="ti ti-plus" aria-hidden="true"></i> Initiate Search</button></div>
+  <div class="tab-row">
+    <button class="tab active" onclick="filterSearches('all',this)">All</button>
+    <button class="tab" onclick="filterSearches('Legal',this)">Legal</button>
+    <button class="tab" onclick="filterSearches('Technical',this)">Technical</button>
+  </div>
+  <div class="card"><table><thead><tr><th>ID</th><th>Loan / Deal</th><th>Type</th><th>Agency</th><th>Initiated</th><th>Due</th><th>Status</th><th>Notes</th></tr></thead><tbody id="searches-tbody"></tbody></table></div>
+</div>
+
+<!-- MONITORING -->
+<div id="pg-monitoring" class="pg">
+  <div class="ph"><div class="pt">Post-Disbursal Monitoring</div><button class="btn btn-p" onclick="openM('add-monitor')"><i class="ti ti-plus" aria-hidden="true"></i> Log Update</button></div>
+  <div class="card" style="margin-bottom:12px"><div class="cb" style="padding:8px 14px;display:flex;gap:10px;align-items:center"><label>Loan:</label><select id="mon-filter" style="width:220px" onchange="renderMonitoring()"><option value="">All loans</option></select></div></div>
+  <div class="card"><table><thead><tr><th>Loan</th><th>Date</th><th>Units Sold</th><th>Collections (₹L)</th><th>Construction %</th><th>Site Visit</th><th>Status</th><th>Remarks</th></tr></thead><tbody id="monitor-tbody"></tbody></table></div>
+</div>
+
+</div><!-- /main -->
+</div><!-- /app -->
+
+<!-- MODALS -->
+
+<!-- Add Deal -->
+<div id="m-add-deal" class="mo">
+  <div class="modal">
+    <div class="mh"><span style="font-weight:500">New Deal — Stage 1: Personal Discussion</span><button class="xb" onclick="closeM('add-deal')"><i class="ti ti-x"></i></button></div>
+    <div class="mb">
+      <div class="form-grid">
+        <div class="fg"><label>Borrower Name</label><input id="d-borrower" placeholder="e.g. Ramesh Constructions Pvt. Ltd."></div>
+        <div class="fg"><label>Borrower Type</label><select id="d-btype"><option>Individual</option><option>Partnership</option><option>Private Ltd.</option><option>LLP</option></select></div>
+        <div class="fg full"><label>Project / Property Address</label><input id="d-project" placeholder="e.g. G+5 Residential, Prahlad Nagar, Ahmedabad"></div>
+        <div class="fg"><label>Loan Ask (₹ Lakh)</label><input id="d-ask" type="number" placeholder="e.g. 200"></div>
+        <div class="fg"><label>PD Date</label><input id="d-pddate" type="date"></div>
+        <div class="fg"><label>Meeting Location</label><input id="d-pdloc" placeholder="e.g. Office / Site visit"></div>
+        <div class="fg"><label>Assigned Officer</label><input id="d-officer" placeholder="e.g. Rahul Mehta"></div>
+        <div class="fg"><label>Current Stage</label><select id="d-stage"><option>PD</option><option>MIS Review</option><option>Structuring</option><option>Credit Committee</option><option>Sanctioned</option><option>Dropped</option></select></div>
+        <div class="fg full"><label>PD Notes / Initial Observations</label><textarea id="d-pdnotes" placeholder="Business background, promoter profile, project overview, initial impressions..."></textarea></div>
+        <div class="fg full"><label>Documents Received</label><textarea id="d-docs" placeholder="e.g. MIS last 3 years, COP, MOF, Project plan, KYC..."></textarea></div>
+        <div class="fg"><label>Viability Assessment</label><select id="d-viability"><option value="">Pending</option><option>Viable</option><option>Marginal</option><option>Not Viable</option></select></div>
+        <div class="fg"><label>Credit Committee Date</label><input id="d-ccdate" type="date"></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn" onclick="closeM('add-deal')">Cancel</button><button class="btn btn-p" onclick="saveDeal()">Save Deal</button></div>
+  </div>
+</div>
+
+<!-- Add Loan -->
+<div id="m-add-loan" class="mo">
+  <div class="modal">
+    <div class="mh"><span style="font-weight:500">New Sanctioned Loan</span><button class="xb" onclick="closeM('add-loan')"><i class="ti ti-x"></i></button></div>
+    <div class="mb">
+      <div class="form-grid">
+        <div class="fg"><label>Borrower Name</label><input id="l-borrower" placeholder=""></div>
+        <div class="fg"><label>Borrower Type</label><select id="l-btype"><option>Individual</option><option>Partnership</option><option>Private Ltd.</option><option>LLP</option></select></div>
+        <div class="fg full"><label>Project Address</label><input id="l-project" placeholder=""></div>
+        <div class="fg"><label>Sanction Amount (₹L)</label><input id="l-sanction" type="number"></div>
+        <div class="fg"><label>Tenor (months)</label><input id="l-tenor" type="number" placeholder="36"></div>
+        <div class="fg"><label>Interest Rate (%)</label><input id="l-rate" type="number" step="0.1" placeholder="11.5"></div>
+        <div class="fg"><label>No. of Tranches Planned</label><input id="l-tranches" type="number" placeholder="4"></div>
+        <div class="fg"><label>Sanction Date</label><input id="l-sdate" type="date"></div>
+        <div class="fg"><label>Repayment Mechanism</label><select id="l-repay"><option>ESCROW + PDC</option><option>PDC only</option><option>Direct debit</option><option>NACH</option></select></div>
+        <div class="fg"><label>Moratorium (months)</label><input id="l-mora" type="number" placeholder="6"></div>
+        <div class="fg full"><label>Security / Collateral</label><input id="l-security" placeholder="e.g. EM of 10 flats + personal guarantee of promoters"></div>
+        <div class="fg"><label>Total Units in Project</label><input id="l-units" type="number" placeholder="e.g. 40"></div>
+        <div class="fg"><label>Avg. Sale Price per Unit (₹L)</label><input id="l-unitprice" type="number" placeholder="e.g. 65"></div>
+        <div class="fg"><label>Stage</label><select id="l-stage"><option>Disbursement</option><option>Monitoring</option><option>Closed</option></select></div>
+        <div class="fg"><label>Status</label><select id="l-status"><option>Active</option><option>On Hold</option><option>NPA</option><option>Closed</option></select></div>
+        <div class="fg full"><label>Remarks / Sanction Conditions</label><textarea id="l-remarks"></textarea></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn" onclick="closeM('add-loan')">Cancel</button><button class="btn btn-p" onclick="saveLoan()">Save Loan</button></div>
+  </div>
+</div>
+
+<!-- Add Tranche -->
+<div id="m-add-tranche" class="mo">
+  <div class="modal">
+    <div class="mh"><span style="font-weight:500">Record Disbursement</span><button class="xb" onclick="closeM('add-tranche')"><i class="ti ti-x"></i></button></div>
+    <div class="mb">
+      <div class="form-grid">
+        <div class="fg full"><label>Loan</label><select id="t-loan"></select></div>
+        <div class="fg"><label>Tranche Amount (₹L)</label><input id="t-amount" type="number"></div>
+        <div class="fg"><label>Disbursement Date</label><input id="t-date" type="date"></div>
+        <div class="fg"><label>Purpose</label><select id="t-purpose"><option>Foundation / Plinth</option><option>Superstructure</option><option>Finishing</option><option>Final Tranche</option><option>Other</option></select></div>
+        <div class="fg"><label>Construction Stage at Disbursal</label><input id="t-cstage" placeholder="e.g. 3rd floor slab complete"></div>
+        <div class="fg"><label>Units Sold (cumulative)</label><input id="t-units" type="number" placeholder="e.g. 8"></div>
+        <div class="fg"><label>Collections Received (₹L)</label><input id="t-coll" type="number" placeholder="e.g. 45"></div>
+        <div class="fg"><label>Status</label><select id="t-status"><option>Pending Approval</option><option>Approved</option><option>Disbursed</option><option>On Hold</option></select></div>
+        <div class="fg full"><label>Site Visit Observations / Conditions</label><textarea id="t-remarks" placeholder="Construction progress, site visit date, conditions before release..."></textarea></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn" onclick="closeM('add-tranche')">Cancel</button><button class="btn btn-p" onclick="saveTranche()">Save</button></div>
+  </div>
+</div>
+
+<!-- Add Search -->
+<div id="m-add-search" class="mo">
+  <div class="modal">
+    <div class="mh"><span style="font-weight:500">Initiate Legal / Technical Search</span><button class="xb" onclick="closeM('add-search')"><i class="ti ti-x"></i></button></div>
+    <div class="mb">
+      <div class="form-grid">
+        <div class="fg full"><label>Linked Loan / Deal ID</label><select id="s-loan"></select></div>
+        <div class="fg"><label>Search Type</label><select id="s-type"><option>Legal</option><option>Technical</option></select></div>
+        <div class="fg"><label>Agency / Advocate Name</label><input id="s-agency" placeholder="e.g. M/s Kapoor & Associates"></div>
+        <div class="fg"><label>Initiated Date</label><input id="s-idate" type="date"></div>
+        <div class="fg"><label>Expected Due Date</label><input id="s-ddate" type="date"></div>
+        <div class="fg"><label>Status</label><select id="s-status"><option>Initiated</option><option>In Progress</option><option>Report Received</option><option>Clear</option><option>Objection</option></select></div>
+        <div class="fg full"><label>Findings / Notes</label><textarea id="s-notes" placeholder="Title chain, encumbrance, valuation, structural observations..."></textarea></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn" onclick="closeM('add-search')">Cancel</button><button class="btn btn-p" onclick="saveSearch()">Save</button></div>
+  </div>
+</div>
+
+<!-- Add Monitoring Update -->
+<div id="m-add-monitor" class="mo">
+  <div class="modal">
+    <div class="mh"><span style="font-weight:500">Log Monitoring Update</span><button class="xb" onclick="closeM('add-monitor')"><i class="ti ti-x"></i></button></div>
+    <div class="mb">
+      <div class="form-grid">
+        <div class="fg full"><label>Loan</label><select id="mon-loan"></select></div>
+        <div class="fg"><label>Date of Update</label><input id="mon-date" type="date"></div>
+        <div class="fg"><label>Units Sold (cumulative)</label><input id="mon-units" type="number" placeholder="e.g. 14"></div>
+        <div class="fg"><label>Collections Received (₹L)</label><input id="mon-coll" type="number" placeholder="e.g. 80"></div>
+        <div class="fg"><label>Construction Completion (%)</label><input id="mon-pct" type="number" min="0" max="100" placeholder="e.g. 45"></div>
+        <div class="fg"><label>Site Visit Done?</label><select id="mon-sv"><option>Yes</option><option>No</option><option>Pending</option></select></div>
+        <div class="fg"><label>ESCROW Balance (₹L)</label><input id="mon-escrow" type="number" placeholder="e.g. 12"></div>
+        <div class="fg"><label>Health Status</label><select id="mon-health"><option>Green</option><option>Amber</option><option>Red</option></select></div>
+        <div class="fg full"><label>Remarks / Observations</label><textarea id="mon-remarks" placeholder="Sales velocity, construction progress, any concerns, promoter meetings..."></textarea></div>
+      </div>
+    </div>
+    <div class="mf"><button class="btn" onclick="closeM('add-monitor')">Cancel</button><button class="btn btn-p" onclick="saveMonitor()">Save</button></div>
+  </div>
+</div>
+
+<script>
+let deals=[],loans=[],tranches=[],searches=[],monitors=[];
+let dc=1001,lc=2001,tc=1,sc=1,mc=1;
+let searchFilterCurrent='all',dealFilterCurrent='all';
+
+const STAGES=['PD','MIS Review','Structuring','Credit Committee','Sanctioned','Dropped'];
+const LOAN_STAGES=['Disbursement','Monitoring','Closed'];
+
+function fL(v){return '₹'+parseFloat(v||0).toFixed(0)+'L'}
+function fD(d){if(!d)return'—';const m=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],p=d.split('-');return p[2]+' '+m[parseInt(p[1])-1]+' '+p[0]}
+function fS(s){const m={Active:'bg','On Hold':'ba',NPA:'br',Closed:'bgr','Pending Approval':'ba',Approved:'bb',Disbursed:'bg','In Progress':'ba','Report Received':'bb',Clear:'bg',Objection:'br',Initiated:'bb',Viable:'bg',Marginal:'ba','Not Viable':'br',PD:'bb','MIS Review':'bb',Structuring:'ba','Credit Committee':'ba',Sanctioned:'bg',Dropped:'br',Green:'bg',Amber:'ba',Red:'br',Disbursement:'ba',Monitoring:'bg'};return`<span class="badge ${m[s]||'bgr'}">${s}</span>`}
+
+function seed(){
+  deals=[
+    {id:'DL-1001',borrower:'Sunrise Developers LLP',btype:'LLP',project:'G+7 Residential, Thaltej',ask:320,pddate:'2024-09-10',pdloc:'Office',officer:'Rahul Mehta',stage:'Credit Committee',pdnotes:'Strong track record. 3 completed projects. Promoters well known in local market.',docs:'MIS 3yr, COP, MOF, Project plan, KYC',viability:'Viable',ccdate:'2025-01-15'},
+    {id:'DL-1002',borrower:'Hetal Shah',btype:'Individual',project:'4 BHK Bungalow, Ambli',ask:55,pddate:'2024-11-05',pdloc:'Site visit',officer:'Priya Desai',stage:'Structuring',pdnotes:'Self-employed professional. Good income. First construction project.',docs:'ITR 3yr, salary slips, property docs',viability:'Viable',ccdate:''},
+    {id:'DL-1003',borrower:'Metro Infra Pvt. Ltd.',btype:'Private Ltd.',project:'Commercial-cum-Residential, Naroda',ask:180,pddate:'2024-10-20',pdloc:'Office',officer:'Rahul Mehta',stage:'MIS Review',pdnotes:'Mixed-use project. RERA pending for commercial portion. Financial profile needs review.',docs:'MIS 2yr, project plan',viability:'Marginal',ccdate:''},
+    {id:'DL-1004',borrower:'Bhavesh Patel',btype:'Individual',project:'Row House, Shela',ask:40,pddate:'2024-12-01',pdloc:'Site visit',officer:'Ankit Shah',stage:'PD',pdnotes:'Initial meeting done. Documents awaited.',docs:'',viability:'',ccdate:''}
+  ];
+  loans=[
+    {id:'LN-2001',borrower:'Shri Ram Builders Pvt. Ltd.',btype:'Private Ltd.',project:'Skyline Heights, Bopal',sanction:250,tenor:48,rate:11.5,tranchesPlanned:5,sdate:'2024-08-15',repay:'ESCROW + PDC',mora:6,security:'EM of 12 flats + PG of all promoters',units:40,unitprice:68,stage:'Monitoring',status:'Active',remarks:'RERA registered. Strong sales velocity.'},
+    {id:'LN-2002',borrower:'Kavita Patel',btype:'Individual',project:'3 BHK Row House, Shela',sanction:85,tenor:36,rate:12,tranchesPlanned:3,sdate:'2024-10-01',repay:'PDC only',mora:3,security:'EM of property Plot 22',units:1,unitprice:95,stage:'Monitoring',status:'Active',remarks:'Self construction.'},
+    {id:'LN-2003',borrower:'Greenfield Infra LLP',btype:'LLP',project:'Commercial Complex, SG Highway',sanction:420,tenor:60,rate:11,tranchesPlanned:6,sdate:'2024-06-20',repay:'ESCROW + PDC',mora:9,security:'EM of commercial units',units:24,unitprice:180,stage:'Disbursement',status:'On Hold',remarks:'Awaiting RERA approval for commercial component.'},
+    {id:'LN-2004',borrower:'Mehul Shah',btype:'Individual',project:'G+3 Residential, Chandkheda',sanction:45,tenor:24,rate:12.5,tranchesPlanned:2,sdate:'2024-11-10',repay:'PDC only',mora:0,security:'EM of entire property',units:6,unitprice:42,stage:'Disbursement',status:'Active',remarks:''}
+  ];
+  tranches=[
+    {id:'TR-001',loanId:'LN-2001',amount:50,date:'2024-09-01',purpose:'Foundation / Plinth',cstage:'Excavation & PCC done',units:3,coll:35,status:'Disbursed',remarks:'Site visit done by Ar. Mehta'},
+    {id:'TR-002',loanId:'LN-2001',amount:70,date:'2024-11-15',purpose:'Superstructure',cstage:'Ground floor columns complete',units:9,coll:120,status:'Disbursed',remarks:'Good progress'},
+    {id:'TR-003',loanId:'LN-2001',amount:65,date:'2025-02-10',purpose:'Superstructure',cstage:'3rd floor slab',units:14,coll:210,status:'Approved',remarks:'Pending DD check'},
+    {id:'TR-004',loanId:'LN-2002',amount:28,date:'2024-10-20',purpose:'Foundation / Plinth',cstage:'Plinth level done',units:0,coll:0,status:'Disbursed',remarks:''},
+    {id:'TR-005',loanId:'LN-2002',amount:35,date:'2025-01-05',purpose:'Superstructure',cstage:'First floor',units:0,coll:0,status:'Pending Approval',remarks:'Site visit report awaited'},
+    {id:'TR-006',loanId:'LN-2004',amount:20,date:'2024-12-01',purpose:'Foundation / Plinth',cstage:'Basement work started',units:0,coll:0,status:'Disbursed',remarks:''}
+  ];
+  searches=[
+    {id:'SR-001',loanId:'LN-2001',type:'Legal',agency:'M/s Kapoor & Associates',idate:'2024-07-20',ddate:'2024-08-10',status:'Clear',notes:'Title clear from 1958. No encumbrance. NA order obtained.'},
+    {id:'SR-002',loanId:'LN-2001',type:'Technical',agency:'Ar. Suresh Mehta',idate:'2024-07-25',ddate:'2024-08-12',status:'Clear',notes:'BU plan approved. RCC framed structure. Valuation ₹275L. LTV 91%.'},
+    {id:'SR-003',loanId:'LN-2002',type:'Legal',agency:'Adv. Priya Desai',idate:'2024-09-05',ddate:'2024-09-25',status:'Clear',notes:'Clear title.'},
+    {id:'SR-004',loanId:'LN-2002',type:'Technical',agency:'Ar. Deepak Joshi',idate:'2024-09-05',ddate:'2024-09-28',status:'Clear',notes:'Valuation ₹95L. RCC structure. Plan approved by AMC.'},
+    {id:'SR-005',loanId:'LN-2003',type:'Legal',agency:'M/s Trivedi Law',idate:'2024-05-15',ddate:'2024-06-10',status:'Objection',notes:'NOC from previous lender pending. File on hold.'},
+    {id:'SR-006',loanId:'LN-2003',type:'Technical',agency:'Ar. Ramnath & Co.',idate:'2024-05-18',ddate:'2024-06-15',status:'Clear',notes:'Valuation ₹450L. RERA for commercial portion pending.'},
+    {id:'SR-007',loanId:'LN-2004',type:'Legal',agency:'Adv. Nitin Shah',idate:'2024-10-22',ddate:'2024-11-05',status:'Clear',notes:''},
+    {id:'SR-008',loanId:'LN-2004',type:'Technical',agency:'Ar. Manoj Patel',idate:'2024-10-24',ddate:'2024-11-10',status:'Clear',notes:'Valuation ₹50L.'},
+    {id:'SR-009',loanId:'DL-1001',type:'Legal',agency:'M/s Shah Law Firm',idate:'2024-12-01',ddate:'2024-12-20',status:'In Progress',notes:''},
+    {id:'SR-010',loanId:'DL-1001',type:'Technical',agency:'Ar. Amit Gupta',idate:'2024-12-03',ddate:'2024-12-22',status:'Report Received',notes:'Valuation ₹340L. Structure as per approved plan.'}
+  ];
+  monitors=[
+    {id:'MN-001',loanId:'LN-2001',date:'2024-10-15',units:6,coll:90,pct:25,sv:'Yes',escrow:18,health:'Green',remarks:'Sales on track. 6 units sold, 2 registered. Escrow healthy.'},
+    {id:'MN-002',loanId:'LN-2001',date:'2025-01-10',units:14,coll:210,pct:50,sv:'Yes',escrow:42,health:'Green',remarks:'Good velocity. 14 of 40 units sold. Construction at 4th floor.'},
+    {id:'MN-003',loanId:'LN-2002',date:'2024-12-01',units:0,coll:0,pct:40,sv:'Yes',escrow:0,health:'Amber',remarks:'Self construction. Construction pace slightly slow.'},
+    {id:'MN-004',loanId:'LN-2003',date:'2024-09-01',units:0,coll:0,pct:10,sv:'No',escrow:0,health:'Red',remarks:'Legal objection unresolved. Disbursement halted. Follow up with borrower.'}
+  ];
+  dc=1005;lc=2005;tc=7;sc=11;mc=5;
+}
+
+function showPg(p){
+  document.querySelectorAll('.pg').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('active'));
+  document.getElementById('pg-'+p).classList.add('active');
+  const ps=['dashboard','pipeline','loans','tranches','searches','monitoring'];
+  document.querySelectorAll('.nb')[ps.indexOf(p)].classList.add('active');
+  if(p==='dashboard')renderDash();
+  if(p==='pipeline')renderDeals('all');
+  if(p==='loans')renderLoans();
+  if(p==='tranches')renderTranches();
+  if(p==='searches')renderSearches();
+  if(p==='monitoring')renderMonitoring();
+}
+
+function openM(id){
+  if(['add-tranche','add-search','add-monitor'].includes(id))populateSelects();
+  document.getElementById('m-'+id).classList.add('open');
+}
+function closeM(id){document.getElementById('m-'+id).classList.remove('open')}
+
+function populateSelects(){
+  const allOpts=[...loans.map(l=>`<option value="${l.id}">${l.id} — ${l.borrower}</option>`),...deals.map(d=>`<option value="${d.id}">${d.id} — ${d.borrower}</option>`)].join('');
+  const loanOpts=loans.map(l=>`<option value="${l.id}">${l.id} — ${l.borrower}</option>`).join('');
+  ['t-loan','mon-loan'].forEach(id=>{const e=document.getElementById(id);if(e)e.innerHTML=loanOpts});
+  const se=document.getElementById('s-loan');if(se)se.innerHTML=allOpts;
+  const mf=document.getElementById('mon-filter');if(mf)mf.innerHTML='<option value="">All loans</option>'+loanOpts;
+  const tf=document.getElementById('tranche-filter');if(tf)tf.innerHTML='<option value="">All loans</option>'+loanOpts;
+}
+
+function getDis(lid){return tranches.filter(t=>t.loanId===lid&&t.status==='Disbursed').reduce((a,t)=>a+parseFloat(t.amount),0)}
+function getBalance(l){return parseFloat(l.sanction)-getDis(l.id)}
+function loanById(id){return loans.find(l=>l.id===id)||deals.find(d=>d.id===id)}
+
+function renderDash(){
+  document.getElementById('dash-date').textContent=new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'});
+  const totS=loans.reduce((a,l)=>a+parseFloat(l.sanction),0);
+  const totD=tranches.filter(t=>t.status==='Disbursed').reduce((a,t)=>a+parseFloat(t.amount),0);
+  const pendT=tranches.filter(t=>t.status==='Pending Approval').length;
+  const obj=searches.filter(s=>s.status==='Objection').length;
+  const redMon=monitors.filter(m=>m.health==='Red').length;
+  document.getElementById('dash-metrics').innerHTML=[
+    ['Total Portfolio',fL(totS),loans.length+' loans'],
+    ['Disbursed',fL(totD),Math.round(totD/totS*100)+'% of portfolio'],
+    ['Active Deals',deals.filter(d=>d.stage!=='Dropped'&&d.stage!=='Sanctioned').length,'In pre-sanction pipeline'],
+    ['Pending Tranches',pendT,'Awaiting approval'],
+    ['Search Objections',obj,'Needs resolution'],
+    ['Red Accounts',redMon,'Monitoring alerts']
+  ].map(([l,v,s])=>`<div class="met"><div class="met-l">${l}</div><div class="met-v">${v}</div><div class="met-s">${s}</div></div>`).join('');
+  const stageCounts={};STAGES.forEach(s=>stageCounts[s]=0);deals.forEach(d=>stageCounts[d.stage]=(stageCounts[d.stage]||0)+1);
+  document.getElementById('dash-pipeline').innerHTML=STAGES.filter(s=>s!=='Dropped').map(s=>{
+    const c=stageCounts[s]||0;
+    return`<div style="display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary)"><span style="font-size:13px">${s}</span><div style="display:flex;align-items:center;gap:8px"><div style="width:80px;height:5px;border-radius:3px;background:var(--color-background-secondary)"><div style="height:100%;border-radius:3px;background:#BA7517;width:${Math.min(100,c*25)}%"></div></div><span style="font-size:13px;font-weight:500;min-width:14px;text-align:right">${c}</span></div></div>`}).join('');
+  const actions=[
+    ...tranches.filter(t=>t.status==='Pending Approval').map(t=>{const l=loanById(t.loanId);return{icon:'ti-cash',color:'var(--color-text-warning)',text:`Tranche pending approval: ${fL(t.amount)}`,sub:l?l.borrower:'—'}}),
+    ...searches.filter(s=>s.status==='Objection').map(s=>{const l=loanById(s.loanId);return{icon:'ti-alert-triangle',color:'var(--color-text-danger)',text:`${s.type} objection: ${s.id}`,sub:l?l.borrower:'—'}}),
+    ...monitors.filter(m=>m.health==='Red').map(m=>{const l=loanById(m.loanId);return{icon:'ti-heart-broken',color:'var(--color-text-danger)',text:`Red account: ${m.loanId}`,sub:m.remarks.substring(0,50)+'...'}}),
+    ...deals.filter(d=>d.ccdate&&d.stage==='Credit Committee').map(d=>({icon:'ti-calendar-event',color:'var(--color-text-info)',text:`CC meeting: ${d.borrower}`,sub:fD(d.ccdate)}))
+  ];
+  document.getElementById('dash-actions').innerHTML=actions.length?actions.map(a=>`<div style="padding:9px 14px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:flex-start;gap:10px"><i class="ti ${a.icon}" style="font-size:15px;color:${a.color};margin-top:1px" aria-hidden="true"></i><div><div style="font-size:13px;font-weight:500">${a.text}</div><div style="font-size:11px;color:var(--color-text-secondary)">${a.sub}</div></div></div>`).join(''):`<div style="padding:24px;text-align:center;font-size:13px;color:var(--color-text-secondary)">All clear</div>`;
+}
+
+function renderDeals(filter){
+  dealFilterCurrent=filter||dealFilterCurrent;
+  const data=dealFilterCurrent==='all'?deals:deals.filter(d=>d.stage===dealFilterCurrent);
+  document.getElementById('deals-tbody').innerHTML=data.length?data.map(d=>`<tr>
+    <td style="font-family:var(--font-mono);font-size:12px">${d.id}</td>
+    <td><div style="font-weight:500;font-size:13px">${d.borrower}</div><div style="font-size:11px;color:var(--color-text-secondary)">${d.btype}</div></td>
+    <td style="font-size:12px;color:var(--color-text-secondary)">${d.project}</td>
+    <td style="font-weight:500">${fL(d.ask)}</td>
+    <td>${fS(d.stage)}</td>
+    <td style="font-size:12px">${fD(d.pddate)}</td>
+    <td style="font-size:12px">${d.officer}</td>
+    <td><button class="btn btn-sm" onclick="openDealDetail('${d.id}')"><i class="ti ti-eye" aria-hidden="true"></i></button></td>
+  </tr>`).join(''):`<tr><td colspan="8"><div style="padding:32px;text-align:center;color:var(--color-text-secondary)">No deals at this stage</div></td></tr>`;
+}
+
+function filterDeals(f,btn){
+  dealFilterCurrent=f;
+  document.querySelectorAll('#pg-pipeline .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderDeals(f);
+}
+
+function openDealDetail(id){
+  const d=deals.find(x=>x.id===id);if(!d)return;
+  const stageIdx=STAGES.indexOf(d.stage);
+  const lnkSearches=searches.filter(s=>s.loanId===id);
+  alert(`Deal: ${d.id} — ${d.borrower}\nStage: ${d.stage}\nViability: ${d.viability||'Pending'}\nPD Notes: ${d.pdnotes}\nDocs: ${d.docs||'None yet'}\nCC Date: ${fD(d.ccdate)||'Not set'}`);
+}
+
+function renderLoans(){
+  document.getElementById('loans-tbody').innerHTML=loans.length?loans.map(l=>{
+    const dis=getDis(l.id);const pct=Math.round(dis/l.sanction*100);
+    return`<tr>
+      <td style="font-family:var(--font-mono);font-size:12px">${l.id}</td>
+      <td><div style="font-weight:500">${l.borrower}</div></td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${l.project}</td>
+      <td>${fL(l.sanction)}</td>
+      <td><div style="display:flex;align-items:center;gap:7px"><div class="pb" style="width:55px"><div class="pf" style="width:${pct}%"></div></div><span style="font-size:12px">${fL(dis)}</span></div></td>
+      <td>${fS(l.stage)}</td>
+      <td>${fS(l.status)}</td>
+      <td><button class="btn btn-sm" onclick="openLoanDetail('${l.id}')"><i class="ti ti-eye" aria-hidden="true"></i></button></td>
+    </tr>`}).join(''):`<tr><td colspan="8"><div style="padding:32px;text-align:center;color:var(--color-text-secondary)">No loans yet</div></td></tr>`;
+}
+
+function openLoanDetail(id){
+  const l=loans.find(x=>x.id===id);if(!l)return;
+  document.getElementById('loans-list').style.display='none';
+  document.getElementById('loan-detail').classList.add('open');
+  const dis=getDis(l.id);const pct=Math.round(dis/l.sanction*100);
+  const lT=tranches.filter(t=>t.loanId===id);
+  const lS=searches.filter(s=>s.loanId===id);
+  const lM=monitors.filter(m=>m.loanId===id).sort((a,b)=>b.date<a.date?-1:1);
+  const lastMon=lM[0];
+  document.getElementById('loan-detail-inner').innerHTML=`
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+      <div><div style="font-size:18px;font-weight:500">${l.borrower}</div><div style="font-size:13px;color:var(--color-text-secondary);margin-top:3px">${l.id} · ${l.project}</div></div>
+      <div style="display:flex;gap:6px">${fS(l.status)}${fS(l.stage)}</div>
+    </div>
+    <div class="metrics" style="margin-bottom:16px">
+      <div class="met"><div class="met-l">Sanction</div><div class="met-v">${fL(l.sanction)}</div></div>
+      <div class="met"><div class="met-l">Disbursed</div><div class="met-v">${fL(dis)}</div><div class="met-s">${pct}%</div></div>
+      <div class="met"><div class="met-l">Balance</div><div class="met-v">${fL(getBalance(l))}</div></div>
+      <div class="met"><div class="met-l">Rate</div><div class="met-v">${l.rate}%</div></div>
+      <div class="met"><div class="met-l">Tenor</div><div class="met-v">${l.tenor}mo</div></div>
+      <div class="met"><div class="met-l">Units Sold</div><div class="met-v">${lastMon?lastMon.units:0} / ${l.units}</div></div>
+    </div>
+    <div class="pb" style="height:8px;margin-bottom:4px"><div class="pf" style="width:${pct}%"></div></div>
+    <div style="font-size:11px;color:var(--color-text-secondary);margin-bottom:18px">${pct}% disbursed · ${l.tranchesPlanned} tranches planned · Sanction ${fD(l.sdate)}</div>
+    <div class="two-col">
+      <div>
+        <div class="section-sep">Loan Structure</div>
+        <div class="card"><div class="cb">
+          ${[['Repayment','repay'],['Moratorium',null,'mora','mo'],['Security','security'],['Units in Project','units'],['Avg Sale Price','unitprice',null,'₹','L'],['Remarks','remarks']].map(([k,f,f2,pre,suf])=>{
+            let v=f?l[f]:l[f2];if(pre)v=(pre||'')+(v||0)+(suf||'');
+            return`<div class="kv-row"><span class="kv-k">${k}</span><span style="font-size:13px;text-align:right;max-width:55%">${v||'—'}</span></div>`}).join('')}
+        </div></div>
+        <div class="section-sep">Legal &amp; Technical</div>
+        <div class="card"><div style="padding:0">${lS.length?lS.map(s=>`<div style="padding:9px 14px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;justify-content:space-between;align-items:center"><div><div style="font-size:13px;font-weight:500">${s.type} — ${s.agency}</div><div style="font-size:11px;color:var(--color-text-secondary)">${s.notes?s.notes.substring(0,60)+'...':fD(s.ddate)}</div></div>${fS(s.status)}</div>`).join(''):'<div style="padding:16px;font-size:13px;color:var(--color-text-secondary)">None</div>'}</div></div>
+      </div>
+      <div>
+        <div class="section-sep">Tranches (${lT.length})</div>
+        <div class="card"><div style="padding:0">${lT.length?lT.map((t,i)=>`<div style="padding:9px 14px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;justify-content:space-between;align-items:center"><div style="display:flex;gap:10px;align-items:center"><div style="width:22px;height:22px;border-radius:50%;background:var(--color-background-secondary);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500">${i+1}</div><div><div style="font-size:13px;font-weight:500">${fL(t.amount)}</div><div style="font-size:11px;color:var(--color-text-secondary)">${t.purpose} · ${fD(t.date)}</div></div></div>${fS(t.status)}</div>`).join(''):'<div style="padding:16px;font-size:13px;color:var(--color-text-secondary)">No tranches</div>'}</div></div>
+        <div class="section-sep">Latest Monitoring</div>
+        <div class="card"><div class="cb">${lastMon?[['Date',fD(lastMon.date)],['Construction',lastMon.pct+'%'],['Collections',fL(lastMon.coll)],['ESCROW Bal',fL(lastMon.escrow)],['Site Visit',lastMon.sv],['Status',lastMon.health]].map(([k,v])=>`<div class="kv-row"><span class="kv-k">${k}</span><span style="font-size:13px">${v}</span></div>`).join(''):'<div style="font-size:13px;color:var(--color-text-secondary)">No monitoring updates</div>'}</div></div>
+      </div>
+    </div>`;
+}
+
+function closeDetail(){
+  document.getElementById('loans-list').style.display='';
+  document.getElementById('loan-detail').classList.remove('open');
+}
+
+function renderTranches(){
+  const filter=document.getElementById('tranche-filter').value;
+  const data=filter?tranches.filter(t=>t.loanId===filter):tranches;
+  document.getElementById('tranches-tbody').innerHTML=data.length?data.map((t,i)=>{
+    const l=loanById(t.loanId);
+    return`<tr>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${t.id}</td>
+      <td><div style="font-weight:500;font-size:13px">${l?l.borrower:'—'}</div><div style="font-size:11px;color:var(--color-text-secondary)">${t.loanId}</div></td>
+      <td style="font-weight:500">${fL(t.amount)}</td>
+      <td style="font-size:12px">${fD(t.date)}</td>
+      <td style="font-size:12px">${t.purpose}</td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${t.cstage}</td>
+      <td>${fS(t.status)}</td>
+    </tr>`}).join(''):`<tr><td colspan="7"><div style="padding:32px;text-align:center;color:var(--color-text-secondary)">No tranches</div></td></tr>`;
+}
+
+function renderSearches(filterType){
+  const type=filterType||searchFilterCurrent;
+  const data=type==='all'?searches:searches.filter(s=>s.type===type);
+  document.getElementById('searches-tbody').innerHTML=data.length?data.map(s=>{
+    const l=loanById(s.loanId);
+    return`<tr>
+      <td style="font-family:var(--font-mono);font-size:12px">${s.id}</td>
+      <td><div style="font-size:13px;font-weight:500">${l?l.borrower:'—'}</div><div style="font-size:11px;color:var(--color-text-secondary)">${s.loanId}</div></td>
+      <td><span class="badge ${s.type==='Legal'?'bb':'ba'}">${s.type}</span></td>
+      <td style="font-size:13px">${s.agency}</td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${fD(s.idate)}</td>
+      <td style="font-size:12px;color:var(--color-text-secondary)">${fD(s.ddate)}</td>
+      <td>${fS(s.status)}</td>
+      <td style="font-size:12px;color:var(--color-text-secondary);max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${s.notes||'—'}</td>
+    </tr>`}).join(''):`<tr><td colspan="8"><div style="padding:32px;text-align:center;color:var(--color-text-secondary)">No searches</div></td></tr>`;
+}
+
+function filterSearches(type,btn){
+  searchFilterCurrent=type;
+  document.querySelectorAll('#pg-searches .tab').forEach(t=>t.classList.remove('active'));
+  btn.classList.add('active');
+  renderSearches(type);
+}
+
+function renderMonitoring(){
+  const filter=document.getElementById('mon-filter').value;
+  const data=filter?monitors.filter(m=>m.loanId===filter):monitors;
+  document.getElementById('monitor-tbody').innerHTML=data.length?data.map(m=>{
+    const l=loanById(m.loanId);
+    return`<tr>
+      <td><div style="font-weight:500;font-size:13px">${l?l.borrower:'—'}</div><div style="font-size:11px;color:var(--color-text-secondary)">${m.loanId}</div></td>
+      <td style="font-size:12px">${fD(m.date)}</td>
+      <td style="font-weight:500">${m.units}</td>
+      <td style="font-weight:500">${fL(m.coll)}</td>
+      <td><div style="display:flex;align-items:center;gap:6px"><div class="pb" style="width:50px"><div class="pf" style="width:${m.pct}%"></div></div><span style="font-size:12px">${m.pct}%</span></div></td>
+      <td>${fS(m.sv==='Yes'?'Clear':m.sv==='No'?'Objection':'In Progress')}</td>
+      <td>${fS(m.health)}</td>
+      <td style="font-size:12px;color:var(--color-text-secondary);max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${m.remarks}</td>
+    </tr>`}).join(''):`<tr><td colspan="8"><div style="padding:32px;text-align:center;color:var(--color-text-secondary)">No monitoring updates</div></td></tr>`;
+}
+
+function saveDeal(){
+  const b=document.getElementById('d-borrower').value,p=document.getElementById('d-project').value,a=document.getElementById('d-ask').value;
+  if(!b||!p||!a){alert('Please fill borrower, project, and loan ask.');return;}
+  deals.push({id:'DL-'+dc++,borrower:b,btype:document.getElementById('d-btype').value,project:p,ask:parseFloat(a),pddate:document.getElementById('d-pddate').value,pdloc:document.getElementById('d-pdloc').value,officer:document.getElementById('d-officer').value,stage:document.getElementById('d-stage').value,pdnotes:document.getElementById('d-pdnotes').value,docs:document.getElementById('d-docs').value,viability:document.getElementById('d-viability').value,ccdate:document.getElementById('d-ccdate').value});
+  closeM('add-deal');renderDeals();
+}
+
+function saveLoan(){
+  const b=document.getElementById('l-borrower').value,p=document.getElementById('l-project').value,s=document.getElementById('l-sanction').value;
+  if(!b||!p||!s){alert('Fill borrower, project, sanction.');return;}
+  loans.push({id:'LN-'+lc++,borrower:b,btype:document.getElementById('l-btype').value,project:p,sanction:parseFloat(s),tenor:parseInt(document.getElementById('l-tenor').value)||36,rate:parseFloat(document.getElementById('l-rate').value)||11,tranchesPlanned:parseInt(document.getElementById('l-tranches').value)||1,sdate:document.getElementById('l-sdate').value,repay:document.getElementById('l-repay').value,mora:parseInt(document.getElementById('l-mora').value)||0,security:document.getElementById('l-security').value,units:parseInt(document.getElementById('l-units').value)||0,unitprice:parseFloat(document.getElementById('l-unitprice').value)||0,stage:document.getElementById('l-stage').value,status:document.getElementById('l-status').value,remarks:document.getElementById('l-remarks').value});
+  closeM('add-loan');renderLoans();
+}
+
+function saveTranche(){
+  const lid=document.getElementById('t-loan').value,amt=document.getElementById('t-amount').value,dt=document.getElementById('t-date').value;
+  if(!lid||!amt||!dt){alert('Fill loan, amount, date.');return;}
+  tranches.push({id:'TR-'+String(tc++).padStart(3,'0'),loanId:lid,amount:parseFloat(amt),date:dt,purpose:document.getElementById('t-purpose').value,cstage:document.getElementById('t-cstage').value,units:parseInt(document.getElementById('t-units').value)||0,coll:parseFloat(document.getElementById('t-coll').value)||0,status:document.getElementById('t-status').value,remarks:document.getElementById('t-remarks').value});
+  closeM('add-tranche');renderTranches();
+}
+
+function saveSearch(){
+  const lid=document.getElementById('s-loan').value,ag=document.getElementById('s-agency').value,id=document.getElementById('s-idate').value;
+  if(!lid||!ag||!id){alert('Fill loan, agency, date.');return;}
+  searches.push({id:'SR-'+String(sc++).padStart(3,'0'),loanId:lid,type:document.getElementById('s-type').value,agency:ag,idate:id,ddate:document.getElementById('s-ddate').value,status:document.getElementById('s-status').value,notes:document.getElementById('s-notes').value});
+  closeM('add-search');renderSearches();
+}
+
+function saveMonitor(){
+  const lid=document.getElementById('mon-loan').value,dt=document.getElementById('mon-date').value;
+  if(!lid||!dt){alert('Fill loan and date.');return;}
+  monitors.push({id:'MN-'+String(mc++).padStart(3,'0'),loanId:lid,date:dt,units:parseInt(document.getElementById('mon-units').value)||0,coll:parseFloat(document.getElementById('mon-coll').value)||0,pct:parseInt(document.getElementById('mon-pct').value)||0,sv:document.getElementById('mon-sv').value,escrow:parseFloat(document.getElementById('mon-escrow').value)||0,health:document.getElementById('mon-health').value,remarks:document.getElementById('mon-remarks').value});
+  closeM('add-monitor');renderMonitoring();
+}
+
+seed();populateSelects();renderDash();renderLoans();renderTranches();renderSearches();renderMonitoring();
+</script>
